@@ -61,32 +61,81 @@ class Date extends React.Component {
         super();
         this.state = { 
             active: true,
-            hour: moment().hour(),
-            minute:  moment().minute(0).format('MM'),
+            hour: this.formatString( moment().hour() ),
+            minute:  this.formatString(moment().minute()),
             day: moment().date(),
             month: moment().month(0).format('MM')
         };
     }
 
     componentDidMount() {
-        interval = setInterval(
-            () => {
-                this.setState({ 
-                    active: !this.state.active,
-                    hour: moment().hour(),
-                    minute: moment().minute(0).format('MM')                  
-                });                
-            },
-            1000
-        );
+        this.startTimer();
     }
 
     componentWillUnmount() {
         clearInterval(interval);
     }
 
+    checkSunPosition = () => {
+        let currentHour = moment().hour();
+        let arraySun = [];
+        // ERROOOOOOOOOR PENDIENTE
+        if(currentHour >= 6 && currentHour < 18){
+            let sunPosition = (currentHour - 6);            
+            for(let i = 10; i > 0; i--){
+                console.log('arraySun', arraySun);
+                if(sunPosition == i){
+                    arraySun.push('a');
+                } else {
+                    arraySun.push('-');
+                }
+            }            
+        } else if(currentHour >= 18 && currentHour < 6){
+            let sunPosition = 0;
+            if(currentHour >= 1){
+                sunPosition = ((currentHour + 4) - 6);
+            } else {
+                sunPosition = currentHour - 18;
+            }
+            console.log('sunPosition', sunPosition);
+            for(let i = 10; i > 0; i--){
+                console.log('arraySun', arraySun);
+                if(sunPosition == i){
+                    arraySun.push('a');
+                } else {
+                    arraySun.push('-');
+                }
+            }   
+        }
+
+        return arraySun;
+    }
+
+    formatString = (time) => {
+        if(time.toString().length <= 1){
+            return `0${time}`;
+        } else {
+            return time.toString();
+        }
+    }
+
+    startTimer = () => {
+        interval = setInterval(
+            () => {
+                this.setState({ 
+                    active: !this.state.active,
+                    hour: this.formatString( moment().hour() ),
+                    minute: this.formatString(moment().minute()),             
+                });                
+            },
+            1000
+        );
+    }
+
     render() {
         let { active, hour, minute, day, month } = this.state;
+
+        console.log(this.checkSunPosition());
 
         return (
             <DateContainer>
@@ -98,8 +147,8 @@ class Date extends React.Component {
                         {`${hour}${active ? ':' : ' '}${minute}`}
                     </Hour>
                     <IconTime>
-                        ----------
-                        <i class="fa fa-sun-o fa-2x" style={{"textAlign": "center"}} aria-hidden="true"></i>
+                        --------
+                        <i className="fa fa-sun-o fa-2x" style={{"textAlign": "center"}} aria-hidden="true"></i>
                         -
                     </IconTime>
                 </TimeContainer>
