@@ -29,7 +29,7 @@ class Tasks extends React.Component{
 
     renderActive = () => {
         switch(this.state.active){
-            case 0:
+            case 0:                
                 return <ToDo checkActive={this.checkActive}/> 
             case 1: 
                 return <Doing checkActive={this.checkActive} /> 
@@ -41,7 +41,7 @@ class Tasks extends React.Component{
     render(){
         return(
             <TasksContainer>
-                <TaskOrder checkActive={this.checkActive}/>
+                <TaskOrder active={this.state.active} checkActive={this.checkActive}/>
                 {
                     this.renderActive()
                 }

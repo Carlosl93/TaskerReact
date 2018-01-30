@@ -41,8 +41,9 @@ const Check = styled.div`
     }
 `;
 
-const Task = styled.div`
+const Title = styled.div`
     margin-left: 10px;
+    max-width: 235px;
 `;
 
 const Tag = styled.div`
@@ -57,8 +58,8 @@ const Tag = styled.div`
     }
 `;
 
-const Icons = styled.div`
-    
+const Icon = styled.div`
+    width: 60px;
 `;
 
 const Description = styled.div`
@@ -99,7 +100,8 @@ class ToDoItem extends React.Component {
     }
 
     render() {
-        let { active } = this.state;
+        let { active }     = this.state;
+        let { title, tag } = this.props;
 
         return (
             <ToDoItemContainer
@@ -108,16 +110,16 @@ class ToDoItem extends React.Component {
                 <TaskContainer>
                     <div style={{ display: "flex", alignItems: "center" }}>
                         <Check />
-                        <Task>Make stuff</Task>
+                        <Title>{title}</Title>
                     </div>
                     {
                         active ?
-                            <Icons>
+                            <Icon>
                                 <i className="fa fa-trash fa-1x" style={{ margin: "0px 5px" }} aria-hidden="true"></i>
                                 <i className="fa fa-check-circle fa-1x" style={{ margin: "0px 5px" }} aria-hidden="true"></i>
-                            </Icons>
+                            </Icon>
                             :
-                            <Tag>TVC</Tag>
+                            <Tag>{tag}</Tag>
                     }
                 </TaskContainer>
                 <div>

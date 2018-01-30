@@ -10,8 +10,8 @@ const TasksOrderContainer = styled.div`
     height: 40px;
     margin: 10px;
 
-    border-top: 1px solid rgba(72, 71, 95, 0.5);
-    border-bottom: 1px solid rgba(72, 71, 95, 0.5);
+    border-top: 2px solid rgba(72, 71, 95, 0.5);
+    border-bottom: 2px solid rgba(72, 71, 95, 0.5);
 
     font-family: 'Open Sans Condensed', sans-serif;
     letter-spacing: 3px;
@@ -36,7 +36,7 @@ const TaskButton = styled.div`
     justify-content: center;
     letter-spacing: 5px;
 
-    font-size: 14px;
+    font-size: ${props => props.active ? '18px' : '14px'};
     transition: 0.2s ease all;
 
     padding: 10px;
@@ -53,13 +53,13 @@ class TaskOrder extends React.Component{
     render(){
         return(
             <TasksOrderContainer>
-                <TaskButton onClick={() => this.props.checkActive(0)}>
+                <TaskButton active={this.props.active === 0} onClick={() => this.props.checkActive(0)}>
                     Today
                 </TaskButton>
-                <TaskButton style={{borderRight: "1px solid rgba(72, 71, 95, 0.5)", borderLeft: "1px solid rgba(72, 71, 95, 0.5)" }} onClick={() => this.props.checkActive(1)}>
+                <TaskButton active={this.props.active === 1} style={{borderRight: "1px solid rgba(72, 71, 95, 0.5)", borderLeft: "1px solid rgba(72, 71, 95, 0.5)" }} onClick={() => this.props.checkActive(1)}>
                     Doing
                 </TaskButton>
-                <TaskButton onClick={() => this.props.checkActive(2)}>
+                <TaskButton active={this.props.active === 2} onClick={() => this.props.checkActive(2)}>
                     Done
                 </TaskButton>            
             </TasksOrderContainer>

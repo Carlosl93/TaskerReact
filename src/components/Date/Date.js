@@ -1,13 +1,16 @@
 import React from 'react';
 import styled from 'styled-components';
 import moment from 'moment';
+import { map } from 'lodash';
 
 const DateContainer = styled.div`
     width: calc(100% - 20px);
     height: 100px;
     margin: 10px;
     display: flex;
-    font-family: 'Quicksand', sans-serif;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Poppins', sans-serif;
     margin: 0;
     margin-bottom: -20px;
     margin-top: 30px;
@@ -18,11 +21,12 @@ const CurrentDay = styled.div`
     width: 70%;
     height: 100px;
     font-size: 72px;
-    font-weight: 300;
+    font-weight: 500;
     letter-spacing: 3px;
     text-align: center;
     opacity: 0.9;
     transition: 0.1s ease all;
+    margin-bottom: 18px; 
 
     &:hover {
         opacity: 1;
@@ -42,7 +46,6 @@ const Hour = styled.div`
     width: 100%;
     height: 50px;
     letter-spacing: 3px;
-    font-family: 'Open Sans Condensed', sans-serif;
     font-size: 38px;
     text-align: center;
 `;
@@ -62,7 +65,7 @@ class Date extends React.Component {
         this.state = { 
             active: true,
             hour: this.formatString( moment().hour() ),
-            minute:  this.formatString(moment().minute()),
+            minute:  this.formatString( moment().minute() ),
             day: moment().date(),
             month: moment().month(0).format('MM')
         };
@@ -76,49 +79,7 @@ class Date extends React.Component {
         clearInterval(interval);
     }
 
-    checkSunPosition = () => {
-        let currentHour = moment().hour();
-        let arraySun = [];
-        // ERROOOOOOOOOR PENDIENTE
-        if(currentHour >= 6 && currentHour < 18){
-            let sunPosition = (currentHour - 6);            
-            for(let i = 10; i > 0; i--){
-                console.log('arraySun', arraySun);
-                if(sunPosition == i){
-                    arraySun.push('a');
-                } else {
-                    arraySun.push('-');
-                }
-            }            
-        } else if(currentHour >= 18 && currentHour < 6){
-            let sunPosition = 0;
-            if(currentHour >= 1){
-                sunPosition = ((currentHour + 4) - 6);
-            } else {
-                sunPosition = currentHour - 18;
-            }
-            console.log('sunPosition', sunPosition);
-            for(let i = 10; i > 0; i--){
-                console.log('arraySun', arraySun);
-                if(sunPosition == i){
-                    arraySun.push('a');
-                } else {
-                    arraySun.push('-');
-                }
-            }   
-        }
-
-        return arraySun;
-    }
-
-    formatString = (time) => {
-        if(time.toString().length <= 1){
-            return `0${time}`;
-        } else {
-            return time.toString();
-        }
-    }
-
+    ///Starts the timers when the component is mounted
     startTimer = () => {
         interval = setInterval(
             () => {
@@ -131,11 +92,57 @@ class Date extends React.Component {
             1000
         );
     }
+    ///Render position of the sun/moon based on the checkSunPosition returned array
+    renderSun = () => {
+        return map(
+            this.checkSunPosition(), 
+            (item) => {
+                let hour = moment().hour();
+                if(item == 'a'){
+                    return <i className="fa fa-sun-o fa-2x" style={{"textAlign": "center"}} aria-hidden="true"></i>; 
+                } else if(item == 'n'){
+                    return <i className="fa fa-moon-o fa-2x" style={{"textAlign": "center"}}aria-hidden="true"></i>;
+                } else {
+                    return '-';
+                }
+            }
+        )
+    }
+    ///Checks the sun/moon position and returns an array with '-', 'n' for the moon or 'a' for the sun
+    checkSunPosition = () => {
+        let currentHour = moment().hour();
+        let arraySun = [];
+
+        if(currentHour >= 6 && currentHour < 18){
+            let sunPosition = (currentHour - 6);            
+            for(let i = 0; i <= 10; i++){
+                sunPosition == i ? arraySun.push('a') : arraySun.push('-');
+            }            
+        } else if((currentHour >= 18 && currentHour <= 24) || (currentHour >= 1 && currentHour < 6)){
+            let sunPosition = 0;
+            if(currentHour >= 1 && currentHour < 6){
+                sunPosition = currentHour + 4;
+            } else if(currentHour >= 18 && currentHour <= 24){
+                sunPosition = currentHour - 18;
+            }
+            for(let i = 0; i <= 10; i++){             
+                sunPosition == i ? arraySun.push('n') : arraySun.push('-');
+            }   
+        }
+        console.log('arraySun', arraySun);
+        return arraySun;
+    }
+    ///Checks if the time argument is less than 1 and return '0+time'
+    formatString = (time) => {
+        if(time.toString().length <= 1){
+            return `0${time}`;
+        } else {
+            return time.toString();
+        }
+    }
 
     render() {
         let { active, hour, minute, day, month } = this.state;
-
-        console.log(this.checkSunPosition());
 
         return (
             <DateContainer>
@@ -144,12 +151,12 @@ class Date extends React.Component {
                 </CurrentDay>
                 <TimeContainer>
                     <Hour>
-                        {`${hour}${active ? ':' : ' '}${minute}`}
+                        {`${hour}${active ? ':' : '.'}${minute}`}
                     </Hour>
                     <IconTime>
-                        --------
-                        <i className="fa fa-sun-o fa-2x" style={{"textAlign": "center"}} aria-hidden="true"></i>
-                        -
+                        {
+                            this.renderSun()
+                        }
                     </IconTime>
                 </TimeContainer>
             </DateContainer>
