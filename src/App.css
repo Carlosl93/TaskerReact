@@ -27,7 +27,22 @@ select:focus,
 textarea:focus,
 button:focus {
     outline: none;
+    border: none;
     border-bottom: 1px solid #F0DA9B;
+    background: transparent;
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: rgba(72,71,95, 1);
+    font-size: 16px;
+}
+
+textarea {
+  outline: none;
+  border: none;
+  border-bottom: 1px solid #F0DA9B;
+  background: transparent;
+  font-family: 'Open Sans Condensed', sans-serif;
+  color: rgba(72,71,95, 1);
+  font-size: 16px;
 }
 
 ::placeholder {

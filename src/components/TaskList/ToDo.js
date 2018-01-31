@@ -1,6 +1,27 @@
 import React from 'react';
 import styled from 'styled-components';
 import ToDoItem from './Todo/ToDoItem.js';
+import { map } from 'lodash';
+
+const data = {
+    items: [
+        {
+            title: 'Make Stuff',
+            tag: 'TVC',
+            description: [
+                'Just do it!'
+            ]
+        },
+        {
+            title: 'fuck off',
+            tag: 'FAN',
+            description: [
+                'Debe estar listo antes de las 6',
+                'Debe tener alguna de las cosas propuestas ayer'
+            ]
+        }
+    ]    
+}
 
 const ToDoContainer = styled.div`
     width: calc(100% - 20px);
@@ -15,46 +36,17 @@ class ToDo extends React.Component {
     render() {
         return (
             <ToDoContainer>
-                <ToDoItem 
-                    title={'Make Stuff'}
-                    tag={'TVC'} 
-                />
-                <ToDoItem 
-                    title={'Work'}
-                    tag={'TVC'} 
-                />
-                <ToDoItem 
-                    title={'Finish your projects today motherfuckerr or you will die and one day you will be killed by a giant'}
-                    tag={'TVC'} 
-                />
-                <ToDoItem 
-                    title={'Marketing'}
-                    tag={'TVC'} 
-                />
-                <ToDoItem 
-                    title={'Make Stuff'}
-                    tag={'TVC'} 
-                />
-                <ToDoItem 
-                    title={'Make Stuff'}
-                    tag={'TVC'} 
-                />
-                <ToDoItem 
-                    title={'Make Stuff'}
-                    tag={'TVC'} 
-                />
-                <ToDoItem 
-                    title={'Make Stuff'}
-                    tag={'TVC'} 
-                />
-                <ToDoItem 
-                    title={'Make Stuff'}
-                    tag={'TVC'} 
-                />
-                <ToDoItem 
-                    title={'Make Stuff'}
-                    tag={'TVC'} 
-                />
+                {
+                    map(
+                        data.items, 
+                        (item) => 
+                            <ToDoItem 
+                                title={item.title}
+                                tag={item.tag}
+                                description={item.description}
+                            />                         
+                    )
+                }            
             </ToDoContainer>
         )
     }

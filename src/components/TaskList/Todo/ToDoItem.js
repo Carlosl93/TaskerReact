@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { map } from 'lodash';
 
 const ToDoItemContainer = styled.div`
     padding: 10px;
@@ -62,6 +63,10 @@ const Icon = styled.div`
     width: 60px;
 `;
 
+const DescriptionContainer = styled.div`
+
+`;
+
 const Description = styled.div`
     display: ${props => props.active ? 'flex' : 'none'};
     flex-direction: row;
@@ -76,14 +81,25 @@ const Description = styled.div`
     margin-top: 10px;
 `;
 
-const DescriptionInput = styled.input`
+const DescriptionText = styled.div`
     width: 100%;
     height: 20px;
     border: none;
     margin: 0px 10px;
     background: transparent;
     font-family: 'Open Sans Condensed', sans-serif;
-    color: rgba(72,71,95, 0.8);
+    color: #48475F;
+    font-size: 16px;
+`;
+
+const DescriptionInput = styled.div`
+    width: 100%;
+    border: none;
+    height: auto;
+    margin: 0px 10px;
+    background: transparent;
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: rgba(72,71,95, 1);
     font-size: 16px;
 `;
 
@@ -101,7 +117,7 @@ class ToDoItem extends React.Component {
 
     render() {
         let { active }     = this.state;
-        let { title, tag } = this.props;
+        let { title, tag, description } = this.props;
 
         return (
             <ToDoItemContainer
@@ -116,7 +132,7 @@ class ToDoItem extends React.Component {
                         active ?
                             <Icon>
                                 <i className="fa fa-trash fa-1x" style={{ margin: "0px 5px" }} aria-hidden="true"></i>
-                                <i className="fa fa-check-circle fa-1x" style={{ margin: "0px 5px" }} aria-hidden="true"></i>
+                                <i className="fa fa-check-circle fa-1x" style={{ margin: "0px 5px" }} aria-hidden="true"></i>                                
                             </Icon>
                             :
                             <Tag>{tag}</Tag>
@@ -125,9 +141,25 @@ class ToDoItem extends React.Component {
                 <div>
                     {
                         active ?
-                            <Description active={active}>
-                                <DescriptionInput placeholder='Description' type='text' autoFocus={true} />
-                            </Description>
+                            <DescriptionContainer>
+                                {
+                                    map(
+                                        description,
+                                        (descriptionText) => 
+                                        <Description active={active}>
+                                            <DescriptionText>
+                                                    {descriptionText}
+                                            </DescriptionText>
+                                        </Description>
+                                    )
+                                }
+                                
+                                <Description active={active}>                                
+                                    <DescriptionInput placeholder='Description' type='text'>
+                                        <textarea style={{paddingBottom: "5px"}} rows="1" cols="40" autoFocus={true}></textarea>
+                                    </DescriptionInput>
+                                </Description>
+                            </DescriptionContainer>
                             :
                             <div></div>
                     }
