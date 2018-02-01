@@ -61,6 +61,7 @@ const Tag = styled.div`
 
 const Icon = styled.div`
     width: 60px;
+    height: 30px;
 `;
 
 const DescriptionContainer = styled.div`
@@ -104,24 +105,50 @@ const DescriptionInput = styled.div`
 `;
 
 class ToDoItem extends React.Component {
-    constructor() {
-        super();
+    constructor(props) {
+        super(props);
+
         this.state = {
-            active: false
-        }
+            active: props.active,
+            textArea: props.description,
+            rows: 1,
+            tagActive: false
+        };
+    }
+
+    componentDidMount() {
+        this.checkRows();
     }
 
     checkToggle = () => {
         this.setState({ active: !this.state.active });
     }
 
+    checkRows = () => {
+        if (this.state.textArea.length > this.state.rows * 50) {
+            this.setState({ rows: Math.ceil(this.state.textArea.length / 50) });
+        }
+    }
+
+    textAreaChange = (e) => {
+        this.checkRows();
+        this.setState({ textArea: e.target.value });
+    }
+
+    checkTagActive = () => {
+        console.log(this.state.tagActive);
+        this.setState({ tagActive: !this.state.tagActive });
+    }
+
     render() {
-        let { active }     = this.state;
+        let { active, tagActive } = this.state;
         let { title, tag, description } = this.props;
 
         return (
             <ToDoItemContainer
                 onClick={this.checkToggle}
+                onMouseEnter={this.checkTagActive}
+                onMouseLeave={this.checkTagActive}
             >
                 <TaskContainer>
                     <div style={{ display: "flex", alignItems: "center" }}>
@@ -129,10 +156,10 @@ class ToDoItem extends React.Component {
                         <Title>{title}</Title>
                     </div>
                     {
-                        active ?
+                        tagActive && active ?
                             <Icon>
-                                <i className="fa fa-trash fa-1x" style={{ margin: "0px 5px" }} aria-hidden="true"></i>
-                                <i className="fa fa-check-circle fa-1x" style={{ margin: "0px 5px" }} aria-hidden="true"></i>                                
+                                <i className="fa fa-trash-alt fa-1x" style={{ margin: "0px 5px" }} aria-hidden="true"></i>
+                                <i className="fa fa-check-circle fa-1x" style={{ margin: "0px 5px" }} aria-hidden="true"></i>
                             </Icon>
                             :
                             <Tag>{tag}</Tag>
@@ -142,21 +169,9 @@ class ToDoItem extends React.Component {
                     {
                         active ?
                             <DescriptionContainer>
-                                {
-                                    map(
-                                        description,
-                                        (descriptionText) => 
-                                        <Description active={active}>
-                                            <DescriptionText>
-                                                    {descriptionText}
-                                            </DescriptionText>
-                                        </Description>
-                                    )
-                                }
-                                
-                                <Description active={active}>                                
+                                <Description active={active}>
                                     <DescriptionInput placeholder='Description' type='text'>
-                                        <textarea style={{paddingBottom: "5px"}} rows="1" cols="40" autoFocus={true}></textarea>
+                                        <textarea style={{ paddingBottom: "5px" }} value={this.state.textArea} rows={this.state.rows} cols="50" onChange={this.textAreaChange} autoFocus={true}></textarea>
                                     </DescriptionInput>
                                 </Description>
                             </DescriptionContainer>

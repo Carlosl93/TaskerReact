@@ -36,7 +36,7 @@ const CurrentDay = styled.div`
 
 const TimeContainer = styled.div`
     width: 30%;
-    height: 100px;
+    height: 85px;
 
     display: flex;
     flex-direction: column;
@@ -99,9 +99,9 @@ class Date extends React.Component {
             (item) => {
                 let hour = moment().hour();
                 if(item == 'a'){
-                    return <i className="fa fa-sun-o fa-2x" style={{"textAlign": "center"}} aria-hidden="true"></i>; 
+                    return <i className="fas fa-sun fa-1x" style={{"textAlign": "center"}} aria-hidden="true"></i>; 
                 } else if(item == 'n'){
-                    return <i className="fa fa-moon-o fa-2x" style={{"textAlign": "center"}}aria-hidden="true"></i>;
+                    return <i className="fas fa-moon fa-1x" style={{"textAlign": "center"}}aria-hidden="true"></i>;
                 } else {
                     return '-';
                 }
@@ -115,7 +115,7 @@ class Date extends React.Component {
 
         if(currentHour >= 6 && currentHour < 18){
             let sunPosition = (currentHour - 6);            
-            for(let i = 0; i <= 10; i++){
+            for(let i = 0; i <= 12; i++){
                 sunPosition == i ? arraySun.push('a') : arraySun.push('-');
             }            
         } else if((currentHour >= 18 && currentHour <= 24) || (currentHour >= 1 && currentHour < 6)){
@@ -125,11 +125,10 @@ class Date extends React.Component {
             } else if(currentHour >= 18 && currentHour <= 24){
                 sunPosition = currentHour - 18;
             }
-            for(let i = 0; i <= 10; i++){             
+            for(let i = 0; i <= 12; i++){             
                 sunPosition == i ? arraySun.push('n') : arraySun.push('-');
             }   
         }
-        console.log('arraySun', arraySun);
         return arraySun;
     }
     ///Checks if the time argument is less than 1 and return '0+time'

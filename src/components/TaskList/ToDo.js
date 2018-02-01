@@ -8,17 +8,15 @@ const data = {
         {
             title: 'Make Stuff',
             tag: 'TVC',
-            description: [
-                'Just do it!'
-            ]
+            description: 'Just do it!',
+            active: false
+            
         },
         {
             title: 'fuck off',
             tag: 'FAN',
-            description: [
-                'Debe estar listo antes de las 6',
-                'Debe tener alguna de las cosas propuestas ayer'
-            ]
+            description: 'Debe tener alguna de las cosas propuestas ayer porque a veces las cosas son una real mierda porque no entiendo que coño',
+            active: true
         }
     ]    
 }
@@ -30,6 +28,22 @@ const ToDoContainer = styled.div`
     border-bottom: 2px solid rgba(72, 71, 95, 0.5);
     overflow-y: scroll;
     overflow-x: hidden;
+`;
+
+const IconAdd = styled.div`
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    color: #48475F;
+    height: 50px;
+    opacity: 0.3;
+    transition: 0.4s ease all;    
+
+    &:hover {
+        opacity: 1;
+        transition: 0.1s ease all;
+    }
 `;
 
 class ToDo extends React.Component {
@@ -44,9 +58,13 @@ class ToDo extends React.Component {
                                 title={item.title}
                                 tag={item.tag}
                                 description={item.description}
+                                active={item.active}
                             />                         
                     )
-                }            
+                }
+                <IconAdd>
+                    <i class="fas fa-plus-circle fa-2x" style={{cursor: "pointer"}}></i>      
+                </IconAdd>
             </ToDoContainer>
         )
     }
