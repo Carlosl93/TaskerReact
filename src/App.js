@@ -12,7 +12,7 @@ import TaskList       from './components/index.js';
 const BodyContainer = styled.div`
   display: flex;
   justify-content: center;
-  padding-top: 50px;
+  padding-top: 20px;
 `;
 
 const MasterContainer = styled.div`

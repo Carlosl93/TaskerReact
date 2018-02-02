@@ -1,7 +1,9 @@
 import React from 'react';
 import styled from 'styled-components';
-import ToDoItem from './Todo/ToDoItem.js';
 import { map } from 'lodash';
+
+import ToDoItem from './Todo/ToDoItem.js';
+import ModalAddTask from './Todo/ModalAddTask.js';
 
 const data = {
     items: [
@@ -46,8 +48,24 @@ const IconAdd = styled.div`
     }
 `;
 
+
 class ToDo extends React.Component {
+    constructor(){
+        super();
+        this.state = { modal: false }
+    }
+
+    showModal = () => {
+        this.setState({ modal: true });
+    }
+
+    closeModal = () => {
+        this.setState({ modal: false });
+    }
+
     render() {
+        let { modal } = this.state;
+
         return (
             <ToDoContainer>
                 {
@@ -62,9 +80,10 @@ class ToDo extends React.Component {
                             />                         
                     )
                 }
-                <IconAdd>
+                <IconAdd onClick={this.showModal}>
                     <i class="fas fa-plus-circle fa-2x" style={{cursor: "pointer"}}></i>      
-                </IconAdd>
+                </IconAdd>            
+                <ModalAddTask active={modal} closeModal={this.closeModal}/>
             </ToDoContainer>
         )
     }

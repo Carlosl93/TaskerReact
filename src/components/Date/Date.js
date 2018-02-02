@@ -66,8 +66,8 @@ class Date extends React.Component {
             active: true,
             hour: this.formatString( moment().hour() ),
             minute:  this.formatString( moment().minute() ),
-            day: moment().date(),
-            month: moment().month(0).format('MM')
+            day: this.formatString( moment().date() ),
+            month: moment().month(1).format('MM')
         };
     }
 
