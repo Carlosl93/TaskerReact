@@ -12,12 +12,54 @@ const ModalContainer = styled.div`
     border-radius: 20px;
     z-index: 99;
     background: linear-gradient(45grad, #5BBABE, #5BBABE, #93D3D2);
-    opacity: ${props => props.alpha};
+    opacity: 0.9;
     transition: 0.2s ease all;
     
     display: flex;
     justify-content: center;
     align-items: center;
+    flex-direction: column;
+`; 
+
+const BoxContainer = styled.div`
+    border: 1px dotted #48475F;
+    border-radius: 20px;
+`;
+
+const InputContainer = styled.div`
+    width: 90%;
+    height: 80px;
+    margin: 5px 0px;
+    padding: 5px 60px;
+    opacity: 1;
+
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    justify-content: center;
+`;
+
+const Label = styled.label`
+    font-size: 20px;
+`;
+
+const Input = styled.input`
+    outline: none;
+    border: none;
+    border-bottom: 1px solid #F0DA9B;
+    background: transparent;
+    font-family: 'Open Sans Condensed', sans-serif;
+    color: rgba(72,71,95, 1);
+    font-size: 24px;
+    &:focus {
+        outline: none;
+        border: none;
+        border-bottom: 1px solid #F0DA9B;
+        background: transparent;
+        font-family: 'Open Sans Condensed', sans-serif;
+        color: rgba(72,71,95, 1);
+        font-size: 24px; 
+    }
 `;
 
 class ModalAddTask extends React.Component{
@@ -28,27 +70,24 @@ class ModalAddTask extends React.Component{
             <div>
                 {
                     active ? 
-                        <Motion defaultStyle={{opacity: 0}} style={{opacity: spring(0.8)}}>
-                            {   value => 
-                                {   
-                                    console.log('value', value);
-                                    return <ModalContainer alpha={value.opacity}>
-                                        <div onClick={() => closeModal()}>x</div>
-                                    </ModalContainer>
-                                }                                
-                            }
-                        </Motion>
+                        <ModalContainer>
+                            <BoxContainer>
+                                <InputContainer>
+                                    <Label>Title</Label>
+                                    <Input></Input>
+                                </InputContainer>
+                                <InputContainer>
+                                    <Label>Project Tag</Label>
+                                    <Input></Input>
+                                </InputContainer>
+                            </BoxContainer>
+                        </ModalContainer>
                         :
-                        <Motion defaultStyle={{opacity: 0.8}} style={{opacity: spring(0)}}>
-                            {
-                                value => <div style={{opacity: `${value.opacity}`}}></div>
-                            }
-                            
-                        </Motion>
+                        <div></div>
                 }
-            </div>
-        );
+                </div>
+            );
+        }
     }
-}
 
 export default ModalAddTask;

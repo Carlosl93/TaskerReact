@@ -21,7 +21,7 @@ class Tasks extends React.Component{
         super();
 
         this.state = {
-            active: 0
+            active: 1
         }
     }
 
