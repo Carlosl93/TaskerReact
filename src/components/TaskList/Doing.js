@@ -2,6 +2,10 @@ import React from 'react';
 import styled from 'styled-components';
 import { PieChart, Pie } from 'recharts';
 
+const red = '#e27e8d';
+const yellow = '#F0DA9B';
+const blue = '#48475F';
+
 const data = [{ name: 'Group A', value: 400 }, { name: 'Group A', value: 100 }];
 
 const DoingContainer = styled.div`
@@ -40,7 +44,7 @@ const Timer = styled.div`
     height: ${props => `${props.size}px`};
     position: absolute;
     border-radius: 50%;
-    background: #F0DA9B;
+    background: ${props => props.color};
     transition: 0.8s ease all;
     color: #48475F;
 `;
@@ -51,6 +55,8 @@ const Tag = styled.div`
     font-size: 48px;
     font-weight: 500;
     color: #48475F;
+
+    z-index: 999;
 `;
 
 const CounterContainer = styled.div`
@@ -80,19 +86,16 @@ const Label = styled.p`
 `;
 
 class Doing extends React.Component {
-    constructor(){
+    constructor() {
         super();
 
         this.state = {
             rotation: 0,
-            size: 270
+            size: 270,
+            timerSize: 260,
+            color: blue,
+            isPlay: false
         }
-    }
-    
-    componentDidMount(){
-        setInterval(
-            this.timerCheck, 1000
-        );
     }
 
     timerCheck = () => {
@@ -104,15 +107,52 @@ class Doing extends React.Component {
         });
     }
 
-    render() {
-        let { rotation, size } = this.state;
+    changeColor = () => {
+        this.setState({
+            color: red
+        });
+    };
 
+    startTime = () => {
+        this.setState(
+            {
+                color: yellow,
+                timerSize: 300,
+                isPlay: true
+            },
+            () => setInterval(
+                this.timerCheck, 1000
+            )
+        )
+    };
+
+    renderTag = () => {
+        if (this.state.isPlay) {
+            return 'TVC';
+        } else {
+            return <i
+                className="fas fa-play fa-1x"
+                style={{ color: yellow, marginLeft: '10px' }}
+            ></i>;
+        }
+    }
+
+    render() {
+        let { rotation, size, color, timerSize, isPlay } = this.state;
+
+        console.log(this.state);
         return (
             <DoingContainer>
                 <TimerContainer>
-                        <TimerLine size={300} rotation={rotation} />
-                        <Timer size={size} />
-                        <Tag>TVC</Tag>
+                    <TimerLine size={timerSize} rotation={rotation} />
+                    <Timer size={size} color={color} />
+                    <Tag onClick={this.startTime}>
+                        <div>
+                            {
+                                this.renderTag()
+                            }
+                        </div>
+                    </Tag>
                 </TimerContainer>
                 <CounterContainer>
                     <Title>Change the fonts of the title</Title>
