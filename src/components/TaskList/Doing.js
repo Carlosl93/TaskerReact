@@ -6,7 +6,28 @@ const red = '#e27e8d';
 const yellow = '#F0DA9B';
 const blue = '#48475F';
 
-const data = [{ name: 'Group A', value: 400 }, { name: 'Group A', value: 100 }];
+const states = {
+    play: {
+        color: yellow,
+        timerSize: 300,
+        toState: 'PAUSE',
+        render: <p>PLAY</p>
+    },
+    pause: {
+        color: red,
+        timerSize: 260,
+        toState: 'STOP',
+        render: <p>PAUSE</p>
+    },
+    stop: {
+        color: blue,
+        timerSize: 260,
+        toState: 'PLAY',
+        render: <p>STOP</p>
+    }
+};
+
+
 
 const DoingContainer = styled.div`
     width: calc(100% - 20px);
@@ -92,9 +113,8 @@ class Doing extends React.Component {
         this.state = {
             rotation: 0,
             size: 270,
-            timerSize: 260,
-            color: blue,
-            isPlay: false
+            isPlay: false,
+            ...states.play
         }
     }
 
@@ -102,7 +122,7 @@ class Doing extends React.Component {
         let { rotation, size } = this.state;
 
         this.setState({
-            rotation: rotation + 10,
+            rotation: rotation + 5,
             size: size >= 260 ? size - 20 : size + 20
         });
     }
@@ -113,43 +133,46 @@ class Doing extends React.Component {
         });
     };
 
-    startTime = () => {
-        this.setState(
-            {
-                color: yellow,
-                timerSize: 300,
-                isPlay: true
-            },
-            () => setInterval(
-                this.timerCheck, 1000
-            )
-        )
+    checkState = () => {
+        switch (this.state.toState) {
+            case 'PLAY':
+            case 'RESUME':
+                this.setState(states.play);
+                return;
+            case 'STOP':
+                this.setState(states.stop);
+                return;
+            case 'PAUSE':
+                this.setState(states.pause);
+                return;
+        }
     };
 
     renderTag = () => {
         if (this.state.isPlay) {
-            return 'TVC';
+            return <p>TVC</p>;
         } else {
             return <i
                 className="fas fa-play fa-1x"
                 style={{ color: yellow, marginLeft: '10px' }}
             ></i>;
         }
-    }
+    };
 
     render() {
-        let { rotation, size, color, timerSize, isPlay } = this.state;
+        let { rotation, size, color, timerSize, isPlay, render } = this.state;
 
         console.log(this.state);
+
         return (
             <DoingContainer>
                 <TimerContainer>
                     <TimerLine size={timerSize} rotation={rotation} />
                     <Timer size={size} color={color} />
-                    <Tag onClick={this.startTime}>
+                    <Tag onClick={this.checkState}>
                         <div>
                             {
-                                this.renderTag()
+                                render
                             }
                         </div>
                     </Tag>
