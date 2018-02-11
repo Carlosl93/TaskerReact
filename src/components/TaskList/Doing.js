@@ -5,29 +5,7 @@ import { PieChart, Pie } from 'recharts';
 const red = '#e27e8d';
 const yellow = '#F0DA9B';
 const blue = '#48475F';
-
-const states = {
-    play: {
-        color: yellow,
-        timerSize: 300,
-        toState: 'PAUSE',
-        render: <p>PLAY</p>
-    },
-    pause: {
-        color: red,
-        timerSize: 260,
-        toState: 'STOP',
-        render: <p>PAUSE</p>
-    },
-    stop: {
-        color: blue,
-        timerSize: 260,
-        toState: 'PLAY',
-        render: <p>STOP</p>
-    }
-};
-
-
+let timer;
 
 const DoingContainer = styled.div`
     width: calc(100% - 20px);
@@ -76,6 +54,8 @@ const Tag = styled.div`
     font-size: 48px;
     font-weight: 500;
     color: #48475F;
+    text-align: center;
+    width: 150px;
 
     z-index: 999;
 `;
@@ -106,6 +86,14 @@ const Label = styled.p`
     opacity: 0.7;
 `;
 
+const PauseContainer = styled.div`
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 10px;
+    margin-left: 10px;
+`
+
 class Doing extends React.Component {
     constructor() {
         super();
@@ -114,65 +102,122 @@ class Doing extends React.Component {
             rotation: 0,
             size: 270,
             isPlay: false,
-            ...states.play
+            hover: false,
         }
     }
 
-    timerCheck = () => {
-        let { rotation, size } = this.state;
+    componentDidMount() {
+        this.checkState('INITIAL');
+    }
 
+    startTime = () => {
+        timer = setInterval(
+            this.intervalCheck, 1000
+        );
+    }
+
+    endTime = () => {
+        clearInterval(timer);
+    }
+
+    intervalCheck = () => {
+        let { rotation, size } = this.state;
         this.setState({
             rotation: rotation + 5,
             size: size >= 260 ? size - 20 : size + 20
         });
     }
 
-    changeColor = () => {
-        this.setState({
-            color: red
-        });
-    };
-
-    checkState = () => {
-        switch (this.state.toState) {
-            case 'PLAY':
-            case 'RESUME':
-                this.setState(states.play);
+    checkState = (nextState) => {
+        switch (nextState) {
+            case 'INITIAL':
+                this.setState({
+                    color: blue,
+                    timerSize: 260,
+                    onState: 'INITIAL'
+                });
                 return;
-            case 'STOP':
-                this.setState(states.stop);
+            case 'PLAY':
+                this.setState({
+                    color: yellow,
+                    timerSize: 300,
+                    onState: 'PLAY'
+                });
+                this.startTime();
                 return;
             case 'PAUSE':
-                this.setState(states.pause);
+                this.setState({
+                    color: red,
+                    size: 270,
+                    timerSize: 260,
+                    onState: 'PAUSE'
+                });
+                this.endTime();
                 return;
         }
-    };
+    }
 
-    renderTag = () => {
-        if (this.state.isPlay) {
-            return <p>TVC</p>;
-        } else {
-            return <i
-                className="fas fa-play fa-1x"
-                style={{ color: yellow, marginLeft: '10px' }}
-            ></i>;
+    checkRender = () => {
+        switch (this.state.onState) {
+            case 'INITIAL':
+                return <i
+                    onClick={() => this.checkState('PLAY')}
+                    className="fas fa-play fa-1x"
+                    style={{ color: yellow, marginLeft: '10px' }}
+                ></i>;
+            case 'PLAY':
+                if (!this.state.hover) {
+                    return <div>
+                        00:00:00
+                    </div>
+                } else {
+                    return <i
+                        onClick={() => this.checkState('PAUSE')}
+                        className="fas fa-pause"
+                        style={{ color: blue, cursor: 'pointer' }}
+                    ></i>
+                };
+            case 'PAUSE':
+                if (!this.state.hover) {
+                    return <div>
+                        00:00:00
+                    </div>
+                } else {
+                    return <PauseContainer>
+                        <i
+                            onClick={() => this.checkState('PLAY')}
+                            className="fas fa-play"
+                            style={{ margin: "0px 5px", color: blue, cursor: 'pointer' }}
+                        ></i>
+                        <i
+                            onClick={() => this.checkState('INITIAL')}
+                            className="fas fa-check-circle"
+                            style={{ margin: "0px 5px", color: blue, cursor: 'pointer' }}
+                        ></i>
+                    </PauseContainer>
+                };
+                return;
         }
-    };
+    }
+
+    checkHover = () => {
+
+        this.setState({ hover: !this.state.hover })
+        console.log(this.state.hover);
+    }
 
     render() {
         let { rotation, size, color, timerSize, isPlay, render } = this.state;
-
-        console.log(this.state);
 
         return (
             <DoingContainer>
                 <TimerContainer>
                     <TimerLine size={timerSize} rotation={rotation} />
                     <Timer size={size} color={color} />
-                    <Tag onClick={this.checkState}>
+                    <Tag onMouseEnter={this.checkHover} onMouseLeave={this.checkHover}>
                         <div>
                             {
-                                render
+                                this.checkRender()
                             }
                         </div>
                     </Tag>
