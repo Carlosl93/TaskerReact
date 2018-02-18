@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import logo from './logo.svg';
-import './App.css';
 import styled from 'styled-components';
+import styles from './App.css';
 
 // ----- Import Components ----- //
 import SelectCurrency from './components/SelectCurrency/index.js';
